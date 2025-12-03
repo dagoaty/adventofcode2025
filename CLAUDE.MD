@@ -12,6 +12,8 @@ adventofcode2025/
 │   └── solution.py
 ├── day2/
 │   └── solution.py
+├── day3/
+│   └── solution.py
 ├── .gitignore
 └── README.md
 ```
@@ -47,6 +49,8 @@ All solutions can be executed directly due to shebang and `if __name__ == "__mai
 - Solutions have a `main()` function that handles argument parsing
 - Helper functions with docstrings for complex logic
 - Debug mode support via `--debug` flag
+- All solutions run both Part 1 and Part 2, displaying results together
+- Solutions should complete in under 4 seconds
 
 ### Style
 - Python 3 with type hints in docstrings
@@ -66,6 +70,15 @@ All solutions can be executed directly due to shebang and `if __name__ == "__mai
 - **Features**: Two-part solution checking different pattern repetition criteria
 - **Key functions**: `get_pattern_repetitions()`, `has_any_pattern_repeating_twice()`, `process_ranges()`
 
+#### Day 3
+- **Problem**: Maximum digit selection from lines of digits
+- **Part 1**: Select 2 digits to form the largest possible two-digit number
+- **Part 2**: Select 12 digits to form the largest possible 12-digit number
+- **Algorithm**: Part 1 uses O(n) right-to-left scan; Part 2 uses O(n) greedy algorithm
+- **Features**: Both parts run automatically in single execution
+- **Key functions**: `find_max_two_digit()`, `find_max_k_digit()`
+- **Note**: Digits must maintain their original order but can be non-consecutive
+
 ## Git Workflow
 
 - **Main branch**: Default branch for stable solutions
@@ -79,10 +92,11 @@ When adding new day solutions:
 1. Create new directory: `dayN/`
 2. Create `solution.py` with:
    - Shebang line: `#!/usr/bin/env python3`
-   - Helper functions with docstrings
-   - `main()` function with argument parsing
-   - Support for custom input files and `--debug` flag
+   - Helper functions with docstrings for both Part 1 and Part 2
+   - `main()` function that runs both parts and displays results separately
+   - Argument parsing supporting custom input files and `--debug` flag
    - `if __name__ == "__main__"` guard
+   - Efficient algorithms ensuring completion within 4 seconds
 3. Test with example input before running on actual input
 4. Keep input files local (they're gitignored)
 
@@ -94,6 +108,8 @@ When adding new day solutions:
 
 ## Notes
 
-- Solutions are written for clarity and correctness, not performance optimization
+- Solutions prioritize clarity and correctness while maintaining efficiency (target: <4 seconds runtime)
 - Each solution is independent - no shared utility modules
 - Puzzle inputs are user-specific and should not be committed to the repository
+- All problems contain two parts - solutions run both parts in a single execution for efficiency
+- Both part results are calculated and displayed together
