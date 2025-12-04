@@ -14,7 +14,10 @@ adventofcode2025/
 │   └── solution.py
 ├── day3/
 │   └── solution.py
+├── day4/
+│   └── solution.py
 ├── .gitignore
+├── CLAUDE.md
 └── README.md
 ```
 
@@ -51,6 +54,7 @@ All solutions can be executed directly due to shebang and `if __name__ == "__mai
 - Debug mode support via `--debug` flag
 - All solutions run both Part 1 and Part 2, displaying results together
 - Solutions should complete in under 4 seconds
+- Refactor working solutions to improve maintainability (extract common logic, eliminate duplication, improve naming)
 
 ### Style
 - Python 3 with type hints in docstrings
@@ -79,6 +83,16 @@ All solutions can be executed directly due to shebang and `if __name__ == "__mai
 - **Key functions**: `find_max_two_digit()`, `find_max_k_digit()`
 - **Note**: Digits must maintain their original order but can be non-consecutive
 
+#### Day 4
+- **Problem**: Grid neighbor analysis with @ and . symbols
+- **Part 1**: Count @ symbols with fewer than 4 @ neighbors in 8 directions (N, NE, E, SE, S, SW, W, NW)
+- **Part 2**: Iteratively remove @ symbols with < 4 neighbors until grid stabilizes
+- **Algorithm**: O(m × n) per grid scan; Part 2 is O(L × m × n) where L = number of removal iterations
+- **Features**: Two-phase per iteration (identify all candidates, then remove simultaneously)
+- **Key functions**: `count_neighbors()`, `find_symbols_with_few_neighbors()`, `count_isolated_at_symbols()`, `iterative_removal()`
+- **Refactoring applied**: Extracted common grid-scanning logic into `find_symbols_with_few_neighbors()` helper to eliminate duplication between Part 1 and Part 2
+- **Note**: Neighbor threshold is < 4 (strictly less than, not ≤ 4) for both parts
+
 ## Git Workflow
 
 - **Main branch**: Default branch for stable solutions
@@ -86,6 +100,33 @@ All solutions can be executed directly due to shebang and `if __name__ == "__mai
 - Input files are gitignored to avoid committing puzzle inputs
 
 ## Development Guidelines
+
+### Outline Before Implementation
+
+**CRITICAL WORKFLOW REQUIREMENT**: Always outline solutions, algorithms, and refactorings BEFORE implementing them.
+
+#### For New Solutions:
+1. **Describe the algorithm**: Explain the approach in plain language
+2. **Provide examples**: Walk through how it works on sample data
+3. **Analyze complexity**: State time and space complexity (Big O notation)
+4. **Identify edge cases**: Note boundary conditions and special cases
+5. **Wait for approval**: Do not write code until the outline is reviewed
+
+#### For Refactoring:
+1. **Identify improvements**: Explain what will be better (DRY, readability, performance, maintainability)
+2. **Show scope**: List which functions/sections will be modified
+3. **Describe changes**: Explain the specific refactoring techniques (extract function, rename, etc.)
+4. **Note risks**: Mention any potential side effects or behavior changes
+5. **Wait for approval**: Do not modify working code until the outline is reviewed
+
+#### For Bug Fixes:
+1. **Explain root cause**: Describe what's wrong and why
+2. **Outline the fix**: Describe the solution approach
+3. **Note side effects**: Mention any other code that might be affected
+
+**Rationale**: Outlining ensures alignment on approach, enables early feedback, catches design issues before implementation, and respects the collaborative nature of problem-solving.
+
+### Adding New Day Solutions
 
 When adding new day solutions:
 
