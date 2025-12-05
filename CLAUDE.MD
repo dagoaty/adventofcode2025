@@ -4,60 +4,30 @@
 
 This repository contains Python solutions for Advent of Code 2025 challenges. Each day's challenge is organized in its own directory with a standalone Python solution.
 
-## Repository Structure
-
-```
-adventofcode2025/
-├── day1/
-│   └── solution.py
-├── day2/
-│   └── solution.py
-├── day3/
-│   └── solution.py
-├── day4/
-│   └── solution.py
-├── .gitignore
-├── CLAUDE.md
-└── README.md
-```
-
 ## File Organization Pattern
 
 - **Each day**: Separate directory named `dayN/` where N is the day number
 - **Solution file**: `solution.py` - executable Python script with shebang (`#!/usr/bin/env python3`)
 - **Input files**: `input` and `input.test` files are gitignored (per `.gitignore`)
-
-## Running Solutions
-
-Solutions follow a consistent pattern:
-
-```bash
-# Run with default input file named "input"
-python3 dayN/solution.py
-
-# Run with custom input file
-python3 dayN/solution.py <filename>
-
-# Run with debug output
-python3 dayN/solution.py --debug
-python3 dayN/solution.py <filename> --debug
-```
-
-All solutions can be executed directly due to shebang and `if __name__ == "__main__"` guard.
+- **Running**: `python3 dayN/solution.py [filename] [--debug]`
 
 ## Code Conventions
 
 ### Structure
-- Each solution is self-contained in a single `solution.py` file
-- Solutions have a `main()` function that handles argument parsing
-- Helper functions with docstrings for complex logic
-- Debug mode support via `--debug` flag
-- All solutions run both Part 1 and Part 2, displaying results together
+Each solution is self-contained in a single `solution.py` file with no shared utility modules. Standard structure:
+- Input parsing function
+- Core algorithm functions for Part 1 and Part 2
+- `main()` function orchestrates: parse → solve part 1 → solve part 2 → display results
+- Argument parsing supporting custom input files and `--debug` flag
+- `if __name__ == "__main__"` guard
+
+Additional requirements:
 - Solutions should complete in under 4 seconds
+- All solutions run both Part 1 and Part 2, displaying results together
 - Refactor working solutions to improve maintainability (extract common logic, eliminate duplication, improve naming)
 
 ### Style
-- Python 3 with type hints in docstrings
+- Python 3 with type hints on function signatures (e.g., `def merge_ranges(ranges: list[tuple[int, int]]) -> list[tuple[int, int]]:`)
 - Clear function documentation explaining parameters and returns
 - Meaningful variable names and constants (e.g., `DIAL_SIZE`, `STARTING_POSITION`)
 - Comprehensive comments for non-obvious logic
@@ -93,11 +63,15 @@ All solutions can be executed directly due to shebang and `if __name__ == "__mai
 - **Refactoring applied**: Extracted common grid-scanning logic into `find_symbols_with_few_neighbors()` helper to eliminate duplication between Part 1 and Part 2
 - **Note**: Neighbor threshold is < 4 (strictly less than, not ≤ 4) for both parts
 
-## Git Workflow
-
-- **Main branch**: Default branch for stable solutions
-- **Feature branches**: Named with pattern `claude/*` for development
-- Input files are gitignored to avoid committing puzzle inputs
+#### Day 5
+- **Problem**: Range coverage analysis with numerical ranges
+- **Part 1**: Count how many integers from a given list appear in any range
+- **Part 2**: Count total number of distinct integers covered by all ranges
+- **Algorithm**: O(m log m) for sorting + O(m) for merging ranges + O(n × m') for Part 1 checking, where m = number of ranges, m' = merged ranges, n = numbers to check
+- **Features**: Merges overlapping and adjacent ranges for efficiency; ranges are inclusive on both ends [start, end]
+- **Key functions**: `merge_ranges()`, `is_in_any_range()`, `count_numbers_in_ranges()`, `count_total_integers_in_ranges()`
+- **Refactoring applied**: Eliminated redundant merge operations by merging once in main(); extracted Part 2 logic into dedicated function for consistency with Part 1
+- **Note**: Adjacent ranges (e.g., [3,5] and [6,8]) are merged into single ranges for optimal performance
 
 ## Development Guidelines
 
@@ -131,26 +105,7 @@ All solutions can be executed directly due to shebang and `if __name__ == "__mai
 When adding new day solutions:
 
 1. Create new directory: `dayN/`
-2. Create `solution.py` with:
-   - Shebang line: `#!/usr/bin/env python3`
-   - Helper functions with docstrings for both Part 1 and Part 2
-   - `main()` function that runs both parts and displays results separately
-   - Argument parsing supporting custom input files and `--debug` flag
-   - `if __name__ == "__main__"` guard
-   - Efficient algorithms ensuring completion within 4 seconds
-3. Test with example input before running on actual input
-4. Keep input files local (they're gitignored)
-
-## Testing Approach
-
-- Use `input.test` files for example/test cases (gitignored)
-- Use `input` files for actual puzzle input (gitignored)
-- Debug mode prints step-by-step execution for verification
-
-## Notes
-
-- Solutions prioritize clarity and correctness while maintaining efficiency (target: <4 seconds runtime)
-- Each solution is independent - no shared utility modules
-- Puzzle inputs are user-specific and should not be committed to the repository
-- All problems contain two parts - solutions run both parts in a single execution for efficiency
-- Both part results are calculated and displayed together
+2. Create `solution.py` following the structure conventions above
+3. Test with `input.test` for example cases before running on `input` for actual puzzle input
+4. Ensure solution completes in under 4 seconds
+5. Refactor if needed to improve maintainability
