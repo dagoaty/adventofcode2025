@@ -73,6 +73,16 @@ Additional requirements:
 - **Refactoring applied**: Eliminated redundant merge operations by merging once in main(); extracted Part 2 logic into dedicated function for consistency with Part 1
 - **Note**: Adjacent ranges (e.g., [3,5] and [6,8]) are merged into single ranges for optimal performance
 
+#### Day 7
+- **Problem**: Line splitting simulation on a grid (lines travel south, split when hitting '^' symbols)
+- **Part 1**: Lines merge when reaching same position; count total number of splits
+- **Part 2**: No merging (universe splits into parallel realities); count total distinct line paths
+- **Algorithm**: Row-by-row simulation - O(rows × active_columns) for both parts
+- **Features**: Part 1 uses set (merging); Part 2 uses dictionary to track line multiplicities (avoids exponential space from grid copying)
+- **Key functions**: `get_split_positions()`, `simulate_line_splits()`, `count_line_paths()`
+- **Refactoring applied**: Extracted `get_split_positions()` helper to eliminate duplicated bounds-checking logic between Part 1 and Part 2
+- **Note**: When line at (row, col) hits '^', it splits into two lines at (row, col-1) and (row, col+1) that continue south
+
 ## Development Guidelines
 
 ### Outline Before Implementation
