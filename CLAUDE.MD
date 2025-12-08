@@ -83,6 +83,21 @@ Additional requirements:
 - **Refactoring applied**: Extracted `get_split_positions()` helper to eliminate duplicated bounds-checking logic between Part 1 and Part 2
 - **Note**: When line at (row, col) hits '^', it splits into two lines at (row, col-1) and (row, col+1) that continue south
 
+#### Day 8
+- **Problem**: Shortest distance clustering in 3D space with Union-Find
+- **Part 1**: Connect n shortest pairs of 3D coordinates; return product of 3 largest connected component sizes
+- **Part 2**: Connect pairs sequentially until all coordinates form single component; return product of x-coordinates of unifying pair
+- **Algorithm**: O(N² log N) for calculating and sorting all pairwise distances; O(N × α(N)) for Union-Find operations where α is inverse Ackermann (effectively constant)
+- **Features**: Union-Find with path compression and union by rank; component count tracking; shared distance calculations between parts
+- **Key functions**: `UnionFind` class with `find()`, `union()`, `get_component_sizes()`; `calculate_all_distances()`; `solve_part1()`, `solve_part2()`
+- **Type aliases**: `Coordinate = Tuple[int, int, int]` and `DistancePair = Tuple[float, int, int]` for improved readability
+- **Refactoring applied**:
+  - Extracted `get_component_sizes()` method into UnionFind class to encapsulate component counting logic
+  - Extracted `determine_part1_connections()` helper for input-size-to-connections mapping
+  - Added type aliases to simplify complex nested type signatures
+  - Enhanced UnionFind documentation with comprehensive Attributes section
+- **Note**: Part 2 expected complexity is O(N log N) for random spatial data; worst case O(N²) runs in ~0.35s for N=1000
+
 ## Development Guidelines
 
 ### Outline Before Implementation
