@@ -35,68 +35,52 @@ Additional requirements:
 ### Day-Specific Notes
 
 #### Day 1
-- **Problem**: Dial rotation simulation (100-position circular dial)
-- **Features**: Tracks zero crossings (stops and pass-throughs)
-- **Key functions**: `count_zero_crossings()`, `apply_rotation()`, `process_instructions()`
+- **Problem**: Dial rotation simulation (100-position circular dial, tracks zero crossings)
+- **Algorithm**: O(n) single pass tracking position and crossings
 
 #### Day 2
-- **Problem**: Pattern repetition detection in numbers
-- **Features**: Two-part solution checking different pattern repetition criteria
-- **Key functions**: `get_pattern_repetitions()`, `has_any_pattern_repeating_twice()`, `process_ranges()`
+- **Problem**: Pattern repetition detection in numbers with different criteria for each part
+- **Algorithm**: O(n × p) where n = number length, p = pattern lengths checked
 
 #### Day 3
 - **Problem**: Maximum digit selection from lines of digits
-- **Part 1**: Select 2 digits to form the largest possible two-digit number
-- **Part 2**: Select 12 digits to form the largest possible 12-digit number
+- **Part 1**: Select 2 digits to form largest two-digit number
+- **Part 2**: Select 12 digits to form largest 12-digit number
 - **Algorithm**: Part 1 uses O(n) right-to-left scan; Part 2 uses O(n) greedy algorithm
-- **Features**: Both parts run automatically in single execution
-- **Key functions**: `find_max_two_digit()`, `find_max_k_digit()`
-- **Note**: Digits must maintain their original order but can be non-consecutive
+- **Note**: Digits must maintain original order but can be non-consecutive
 
 #### Day 4
-- **Problem**: Grid neighbor analysis with @ and . symbols
-- **Part 1**: Count @ symbols with fewer than 4 @ neighbors in 8 directions (N, NE, E, SE, S, SW, W, NW)
-- **Part 2**: Iteratively remove @ symbols with < 4 neighbors until grid stabilizes
-- **Algorithm**: O(m × n) per grid scan; Part 2 is O(L × m × n) where L = number of removal iterations
-- **Features**: Two-phase per iteration (identify all candidates, then remove simultaneously)
-- **Key functions**: `count_neighbors()`, `find_symbols_with_few_neighbors()`, `count_isolated_at_symbols()`, `iterative_removal()`
-- **Refactoring applied**: Extracted common grid-scanning logic into `find_symbols_with_few_neighbors()` helper to eliminate duplication between Part 1 and Part 2
-- **Note**: Neighbor threshold is < 4 (strictly less than, not ≤ 4) for both parts
+- **Problem**: Grid neighbor analysis - count/remove @ symbols based on neighbor count
+- **Part 1**: Count @ symbols with < 4 @ neighbors (8 directions)
+- **Part 2**: Iteratively remove @ symbols with < 4 neighbors until stable
+- **Algorithm**: O(m × n) per scan; Part 2 is O(L × m × n) where L = iterations. Two-phase per iteration: identify candidates, then remove simultaneously to avoid order dependencies
 
 #### Day 5
-- **Problem**: Range coverage analysis with numerical ranges
-- **Part 1**: Count how many integers from a given list appear in any range
-- **Part 2**: Count total number of distinct integers covered by all ranges
-- **Algorithm**: O(m log m) for sorting + O(m) for merging ranges + O(n × m') for Part 1 checking, where m = number of ranges, m' = merged ranges, n = numbers to check
-- **Features**: Merges overlapping and adjacent ranges for efficiency; ranges are inclusive on both ends [start, end]
-- **Key functions**: `merge_ranges()`, `is_in_any_range()`, `count_numbers_in_ranges()`, `count_total_integers_in_ranges()`
-- **Refactoring applied**: Eliminated redundant merge operations by merging once in main(); extracted Part 2 logic into dedicated function for consistency with Part 1
-- **Note**: Adjacent ranges (e.g., [3,5] and [6,8]) are merged into single ranges for optimal performance
+- **Problem**: Range coverage analysis
+- **Part 1**: Count how many integers from a list appear in any range
+- **Part 2**: Count total distinct integers covered by all ranges
+- **Algorithm**: O(m log m) sort + O(m) merge + O(n × m') checking. Merges overlapping AND adjacent ranges (e.g., [3,5] and [6,8] → [3,8]) for efficiency
+- **Note**: Ranges are inclusive [start, end]
 
 #### Day 7
-- **Problem**: Line splitting simulation on a grid (lines travel south, split when hitting '^' symbols)
-- **Part 1**: Lines merge when reaching same position; count total number of splits
-- **Part 2**: No merging (universe splits into parallel realities); count total distinct line paths
-- **Algorithm**: Row-by-row simulation - O(rows × active_columns) for both parts
-- **Features**: Part 1 uses set (merging); Part 2 uses dictionary to track line multiplicities (avoids exponential space from grid copying)
-- **Key functions**: `get_split_positions()`, `simulate_line_splits()`, `count_line_paths()`
-- **Refactoring applied**: Extracted `get_split_positions()` helper to eliminate duplicated bounds-checking logic between Part 1 and Part 2
-- **Note**: When line at (row, col) hits '^', it splits into two lines at (row, col-1) and (row, col+1) that continue south
+- **Problem**: Line splitting simulation (lines travel south, split on '^' symbols)
+- **Part 1**: Lines merge at same position; count total splits
+- **Part 2**: No merging (parallel universes); count distinct line paths
+- **Algorithm**: Row-by-row O(rows × active_columns). Part 1 uses set (merging), Part 2 uses dictionary tracking multiplicities (avoids exponential space from grid copying)
 
 #### Day 8
-- **Problem**: Shortest distance clustering in 3D space with Union-Find
-- **Part 1**: Connect n shortest pairs of 3D coordinates; return product of 3 largest connected component sizes
-- **Part 2**: Connect pairs sequentially until all coordinates form single component; return product of x-coordinates of unifying pair
-- **Algorithm**: O(N² log N) for calculating and sorting all pairwise distances; O(N × α(N)) for Union-Find operations where α is inverse Ackermann (effectively constant)
-- **Features**: Union-Find with path compression and union by rank; component count tracking; shared distance calculations between parts
-- **Key functions**: `UnionFind` class with `find()`, `union()`, `get_component_sizes()`; `calculate_all_distances()`; `solve_part1()`, `solve_part2()`
-- **Type aliases**: `Coordinate = Tuple[int, int, int]` and `DistancePair = Tuple[float, int, int]` for improved readability
-- **Refactoring applied**:
-  - Extracted `get_component_sizes()` method into UnionFind class to encapsulate component counting logic
-  - Extracted `determine_part1_connections()` helper for input-size-to-connections mapping
-  - Added type aliases to simplify complex nested type signatures
-  - Enhanced UnionFind documentation with comprehensive Attributes section
-- **Note**: Part 2 expected complexity is O(N log N) for random spatial data; worst case O(N²) runs in ~0.35s for N=1000
+- **Problem**: 3D coordinate clustering using shortest distances
+- **Part 1**: Connect n shortest pairs; return product of 3 largest component sizes
+- **Part 2**: Connect pairs sequentially until single component; return product of unifying pair's x-coordinates
+- **Algorithm**: O(N² log N) calculate/sort distances + O(N × α(N)) Union-Find (α ≈ constant). Union-Find uses path compression and union by rank
+- **Note**: Part 2 expected O(N log N) for random data; worst O(N²) runs ~0.35s for N=1000
+
+#### Day 9
+- **Problem**: Rectangle area calculations
+- **Part 1**: Find maximum area between any two coordinates using `(|x1-x2| + 1) × (|y1-y2| + 1)`
+- **Part 2**: Find largest rectangle (corners from input) fitting inside rectilinear polygon
+- **Algorithm**: Part 1 is O(n²) exhaustive search. Part 2 is O(n² × k × m) using edge bucketing (spatial index by y-coordinate) and ray casting for point-in-polygon, reducing m from ~496 to ~2 edges per point (16x speedup: 88s → 5.5s)
+- **Note**: Part 1 boundary-point optimization failed - maximum product comes from balanced factors, not maximizing factors. Part 2 requires checking all four rectangle corners plus perimeter samples at polygon vertices (corner-only checking insufficient for concave polygons). Bounding box pre-filter was 0% effective when all coordinates on perimeter
 
 ## Development Guidelines
 
