@@ -82,6 +82,27 @@ Additional requirements:
 - **Algorithm**: Part 1 is O(n²) exhaustive search. Part 2 is O(n² × k × m) using edge bucketing (spatial index by y-coordinate) and ray casting for point-in-polygon, reducing m from ~496 to ~2 edges per point (16x speedup: 88s → 5.5s)
 - **Note**: Part 1 boundary-point optimization failed - maximum product comes from balanced factors, not maximizing factors. Part 2 requires checking all four rectangle corners plus perimeter samples at polygon vertices (corner-only checking insufficient for concave polygons). Bounding box pre-filter was 0% effective when all coordinates on perimeter
 
+#### Day 10
+- **Problem**: Grid pathfinding with elevation constraints (0-9 heights)
+- **Part 1**: Count reachable 9-height positions from each 0-height (trailhead), moving only to positions with height +1
+- **Part 2**: Count distinct paths from each trailhead to any 9-height position
+- **Algorithm**: BFS from each trailhead. Part 1 uses set for reachable positions O(cells). Part 2 counts all paths using DFS with memoization O(cells × paths)
+- **Note**: Part 1 counts unique endpoints, Part 2 counts unique paths to those endpoints
+
+#### Day 11
+- **Problem**: Stone transformation simulation with splitting/multiplication rules
+- **Part 1**: Simulate 25 iterations of transformations
+- **Part 2**: Simulate 75 iterations
+- **Algorithm**: O(iterations × unique_values) using dictionary to track stone counts (value → count). Stones transform based on rules: 0→1, even-digit count→split, else ×2024. Avoids exponential array growth by counting identical values
+- **Note**: Direct simulation would create ~2^75 stones. Dictionary approach handles 75 iterations efficiently by grouping identical stones
+
+#### Day 12
+- **Problem**: Tile tessellation - determine which grids can fit required tiles with overlap constraints
+- **Part 1**: Count how many test cases have at least one valid tile arrangement
+- **Algorithm**: Backtracking with constraint-based placement. Tiles are 3×3 patterns that can rotate/flip (8 orientations). Tiles can overlap only where filled cell overlaps empty cell. O(orientations × positions)^tiles depth with early pruning
+- **Key optimizations**: Pre-generate all orientations, sort tiles by constraint level (fewest orientations first), early rejection for >100% grid utilization, bounds-based position limiting
+- **Note**: Computationally hard problem (1000 test cases, 121-388 tiles per case, 35×35 to 50×50 grids). Runs in ~14 seconds. Simple constraint ordering outperformed expensive MRV heuristic that recalculated placements at every step
+
 ## Development Guidelines
 
 ### Outline Before Implementation
